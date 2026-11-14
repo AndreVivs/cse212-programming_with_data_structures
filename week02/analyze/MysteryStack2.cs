@@ -1,5 +1,5 @@
 ﻿public static class MysteryStack2 {
-    private static bool IsFloat(string text) {
+    private static bool IsFloat(string text) { // 5 3 7 + * and 6 2 + 5 3 - /
         return float.TryParse(text, out _);
     }
 
@@ -47,3 +47,12 @@
         return stack.Pop();
     }
 }
+
+// Determine the result of the function if the following inputs were provided:
+// 5 3 7 + * = 50
+// 6 2 + 5 3 - / = 4
+// Consider possible values for the input parameter text that would result in the function doing the following:
+// Display "Invalid Case 1!" - 3 4 * + 
+// Display "Invalid Case 2!" - 3 4 0 * / 
+// Display "Invalid Case 3!" - 3 4 * ^
+// Display "Invalid Case 4!" - 3 4 5 6 * + 

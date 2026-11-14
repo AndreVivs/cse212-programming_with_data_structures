@@ -4,10 +4,14 @@
         foreach (var letter in text)
             stack.Push(letter);
 
-        var result = "";
+        var result = "";  
         while (stack.Count > 0)
             result += stack.Pop();
 
         return result;
     }
 }
+
+//racecar - racecar
+// stressed - desserts
+// a nut for a jar of tuna -anut rof a raj foanut
