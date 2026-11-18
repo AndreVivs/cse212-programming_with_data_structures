@@ -11,7 +11,10 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3) and
     // run until the queue is empty
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found:
+    // 1) <Bob> was expected, but <Sue> was returned.
+    // To fix this, line 17 in PersonQueue.cs was changed from _queue.Insert(0, person) to _queue.Add(person)
+    // to add to the back of the queue instead of the front.
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
         var bob = new Person("Bob", 2);
@@ -43,7 +46,10 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3)
     // After running 5 times, add George with 3 turns.  Run until the queue is empty.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
-    // Defect(s) Found: 
+    // Defect(s) Found:
+    // New people were inserted at the front instead of
+    // the back of the queue, disrupting the expected order.
+    // Fixed PersonQueue.Enqueue() to use Add(person).
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
         var bob = new Person("Bob", 2);
@@ -86,8 +92,10 @@ public class TakingTurnsQueueTests
     // Run 10 times.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
     // Defect(s) Found:
-    // - line 17 in PersonQueue.cs - Add(person) instead of Insert(0, person) to add to the back of the queue instead of the front
-    // 
+    // Line 17 in PersonQueue.cs - Add(person) instead of Insert(0, person) to add to the back of the queue instead of the front
+    // People with Turns = 0 were not re-enqueued.
+    // Added a condition for Turns <= 0 to preserve
+    // infinite turns without modifying the turn count.
 
     public void TestTakingTurnsQueue_ForeverZero()
     {
@@ -119,7 +127,10 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Tim (Forever), Sue (3)
     // Run 10 times.
     // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found:
+    // Negative turn values were not treated as infinite.
+    // Added a condition to re-enqueue people with
+    // Turns <= 0 without changing their turn count.
     public void TestTakingTurnsQueue_ForeverNegative()
     {
         var timTurns = -3;
@@ -146,7 +157,9 @@ public class TakingTurnsQueueTests
     [TestMethod]
     // Scenario: Try to get the next person from an empty queue
     // Expected Result: Exception should be thrown with appropriate error message.
-    // Defect(s) Found: 
+    // Defect(s) Found: None.
+    // The method correctly throws InvalidOperationException
+    // with the expected message when the queue is empty.
     public void TestTakingTurnsQueue_Empty()
     {
         var players = new TakingTurnsQueue();
