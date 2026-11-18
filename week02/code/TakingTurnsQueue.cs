@@ -40,9 +40,16 @@ public class TakingTurnsQueue
         else
         {
             Person person = _people.Dequeue();
-            if (person.Turns > 1)
+            // Re-enqueue people with infinite turns (0 or less) without changing their turn count.
+            // For finite turns greater than 1, decrease the count and re-enqueue.
+            // People with 1 turn are not re-enqueued because their last turn is complete.
+            if (person.Turns <= 0)
             {
-                person.Turns -= 1;
+                _people.Enqueue(person);
+            }
+            else if (person.Turns > 1)
+            {
+                person.Turns--;
                 _people.Enqueue(person);
             }
 
